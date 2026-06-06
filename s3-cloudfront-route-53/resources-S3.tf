@@ -70,7 +70,7 @@ resource "aws_s3_object" "Images" {
 }
 
 # ---------------------------
-# Public Access Block (ALLOW public policy)
+# Public Access Block (Block all the public access directly to s3 bucket only cloudfront distribution can access it )
 # ---------------------------
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.web_bucket.id
