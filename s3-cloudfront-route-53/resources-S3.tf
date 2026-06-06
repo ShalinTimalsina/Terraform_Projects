@@ -9,7 +9,7 @@ resource "random_id" "unique_id" {
 # S3 Bucket
 # ---------------------------
 resource "aws_s3_bucket" "web_bucket" {
-  bucket = "static-web-bucket-${random_id.unique_id.hex}"
+  bucket = "shalin-timalsina.me-${random_id.unique_id.hex}"
 
   tags = {
     Name = "static_web"
@@ -75,41 +75,43 @@ resource "aws_s3_object" "Images" {
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.web_bucket.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 # ---------------------------
-# Bucket Policy (public read)
+# Bucket Policy (Only for cloudfront to access)
 # ---------------------------
-resource "aws_s3_bucket_policy" "web_bucket_policy" {
-  bucket = aws_s3_bucket.web_bucket.id
+resource "aws_s3_bucket_policy" "cloudfront-access" {
+  bucket     = aws_s3_bucket.web_bucket.id
+  depends_on = [aws_s3_bucket_public_access_block.public_access]
 
-  depends_on = [
-    aws_s3_bucket_public_access_block.public_access
-  ]
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect    = "Allow"
-      Principal = "*"
-      Action    = "s3:GetObject"
-      Resource  = "${aws_s3_bucket.web_bucket.arn}/*"
-    }]
-  })
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Sid" : "AllowCloudFrontRead",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "cloudfront.amazonaws.com"
+          },
+          "Action" : [
+            "s3:GetObject",
+            
+          ]
+          "Resource" : "${aws_s3_bucket.web_bucket.arn}/*"
+          "Condition" : {
+            "StringEquals" : {
+              "AWS:SourceArn" : "${aws_cloudfront_distribution.s3_distribution.arn}"
+            }
+          }
+        }
+      ]
+    }
+  )
 }
 
-# ---------------------------
-# Static Website Hosting
-# ---------------------------
-resource "aws_s3_bucket_website_configuration" "configuration" {
-  bucket = aws_s3_bucket.web_bucket.id
-
-  index_document {
-    suffix = "index.html"
-  }
-}
 
