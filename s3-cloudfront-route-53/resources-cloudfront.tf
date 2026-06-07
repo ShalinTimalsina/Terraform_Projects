@@ -4,6 +4,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
+  
 }
 
 
@@ -14,6 +15,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
     origin_id                = local.origin_id
   }
+
+  aliases = [
+    "shalin-timalsina.me",
+    "www.shalin-timalsina.me"
+
+  ]
 
   enabled             = true
   is_ipv6_enabled     = true
