@@ -8,3 +8,15 @@ output "cloudfront_distribution_id" {
   value = "http://${aws_cloudfront_distribution.s3_distribution.domain_name}"
 
 }
+
+output "root_url" {
+  description = "This is the root domain"
+  value = "https://${aws_route53_record.root.fqdn}"
+  
+}
+
+output "subdomain_url" {
+  description = "This is the domain with subdomain as www"
+  value = "https://${aws_route53_record.sub_domain.fqdn}"
+  
+}
