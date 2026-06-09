@@ -1,12 +1,12 @@
 # Looks in the existing zone instead of creating new one.
 data "aws_route53_zone" "main" {
-  name = "shalin-timalsina.me"
+  name = var.domain_name
 }
 
 # Created a A name record in Route 53 for the root
 resource "aws_route53_record" "root" {
 
-    name = "shalin-timalsina.me"
+    name = var.domain_name
     zone_id = data.aws_route53_zone.main.zone_id
     type = "A"
 
@@ -20,7 +20,7 @@ resource "aws_route53_record" "root" {
 # Added the subdomain with www also
 resource "aws_route53_record" "sub_domain" {
 
-    name = "www.shalin-timalsina.me"
+    name = local.full_domain
     zone_id = data.aws_route53_zone.main.zone_id
     type = "A"
 

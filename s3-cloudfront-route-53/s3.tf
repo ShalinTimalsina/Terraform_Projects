@@ -9,7 +9,7 @@ resource "random_id" "unique_id" {
 # S3 Bucket
 # ---------------------------
 resource "aws_s3_bucket" "web_bucket" {
-  bucket = "shalin-timalsina.me-${random_id.unique_id.hex}"
+  bucket = "${var.s3_bucket_name}-${random_id.unique_id.hex}"
 
   tags = {
     Name = "static_web"

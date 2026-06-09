@@ -17,15 +17,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   aliases = [
-    "shalin-timalsina.me",
-    "www.shalin-timalsina.me"
+    var.domain_name,
+    local.full_domain
 
   ]
 
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Some comment"
-  default_root_object = "index.html"
+  default_root_object = var.default_root_object_s3
+  
 
 
 
@@ -49,7 +50,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
 
-  price_class = "PriceClass_200"
+  price_class = var.price_class
 
   restrictions {
     geo_restriction {
@@ -58,10 +59,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  tags = {
-    Environment = "testing"
-  }
-
+ 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.certificate.arn
     ssl_support_method = "sni-only"
