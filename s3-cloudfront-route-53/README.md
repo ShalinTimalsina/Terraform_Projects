@@ -2,7 +2,9 @@
 
 This project demonstrates a production-style static website hosting architecture on AWS, fully provisioned using Terraform.
 
-![Architecture Diagram](Terraform_Projects/s3-cloudfront-route-53/architecture-diagram.png)
+![Architecture-Diagram](architecture-diagram/architecture-diagram.png)
+
+
 
 ### Architecture Overview
 
