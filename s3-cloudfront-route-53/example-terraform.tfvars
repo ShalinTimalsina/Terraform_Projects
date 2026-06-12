@@ -4,7 +4,7 @@ s3_bucket_name = "Enter your desired S3 bucket name"
 
 domain_name = "Enter the domain name like (example.com)"
 
-sub_domain = "enter the sub_domain you want like (www or app or blog)"
+sub_domain = "enter the sub_domain you want like (www or app or blog default is **www**)"
 
 default_root_object_s3 = "Enter the default root object (eg : index.html)"
 
