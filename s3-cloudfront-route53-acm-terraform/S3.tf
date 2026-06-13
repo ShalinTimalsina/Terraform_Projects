@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "web_bucket" {
 resource "aws_s3_object" "html_file" {
   bucket       = aws_s3_bucket.web_bucket.id
   key          = "index.html"
-  source       = "${path.module}/RiverBankinn/index.html"
+  source       = "${path.module}/Website-assets/index.html"
   content_type = "text/html"
 
   lifecycle {
@@ -30,23 +30,6 @@ resource "aws_s3_object" "html_file" {
   }
 }
 
-# ---------------------------
-# Local processing
-# ---------------------------
-locals {
-  all_images = fileset("${path.module}/RiverBankinn/Images", "**")
-
-  mime_types = {
-    html = "text/html"
-    css  = "text/css"
-    js   = "application/javascript"
-    png  = "Images/png"
-    jpg  = "Images/jpeg"
-    jpeg = "Images/jpeg"
-    gif  = "Images/gif"
-    webp = "Images/webp"
-  }
-}
 
 # ---------------------------
 # Upload images
@@ -56,7 +39,7 @@ resource "aws_s3_object" "Images" {
 
   bucket = aws_s3_bucket.web_bucket.id
   key    = "Images/${each.value}"
-  source = "${path.module}/RiverBankinn/Images/${each.value}"
+  source = "${path.module}/Website-assets/Images/${each.value}"
 
   content_type = lookup(
     local.mime_types,
