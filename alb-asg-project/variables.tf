@@ -14,14 +14,12 @@ variable "vpc_config" {
 
 }
 
-variable "project" {
-  description = "This is the name of the project"
-  type = string
-}
-
-variable "environment" {
-description = "This is the name of the environment"
-type = string
+variable "tags_config" {
+  description = "This is for the project and environment name "
+  type = object({
+    project =  string
+    environment = string
+  })
 }
 
 variable "launch_temp_config" {
