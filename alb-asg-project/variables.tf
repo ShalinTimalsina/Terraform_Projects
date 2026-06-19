@@ -1,15 +1,15 @@
 variable "aws_region" {
-    description = "This is the value of aws region"
-    type = string
+  description = "This is the value of aws region"
+  type        = string
 }
 
 variable "vpc_config" {
   description = "This is the configurations of the vpc"
   type = object({
-    vpc_cidr_block = string 
+    vpc_cidr_block     = string
     cidr_public_subnet = string
-    az_public_subnet = string
-    igw_cidr_block = optional(string, "0.0.0.0/0")
+    az_public_subnet   = string
+    igw_cidr_block     = optional(string, "0.0.0.0/0")
   })
 
 }
@@ -17,7 +17,7 @@ variable "vpc_config" {
 variable "tags_config" {
   description = "This is for the project and environment name "
   type = object({
-    project =  string
+    project     = string
     environment = string
   })
 }
@@ -25,7 +25,7 @@ variable "tags_config" {
 variable "launch_temp_config" {
   description = "The is the configuration for launch template"
   type = object({
-    ami_id  = string
+    ami_id        = string
     instance_type = string
   })
 }
@@ -34,12 +34,12 @@ variable "asg_config" {
   description = "ASG capacity configuration"
   type = object({
     availability_zone = string
-    min     = number
-    max     = number
-    desired = number
+    min               = number
+    max               = number
+    desired           = number
   })
-  
- validation {
+
+  validation {
     condition     = var.asg_config.min <= var.asg_config.desired && var.asg_config.desired <= var.asg_config.max
     error_message = "Ensure: min should be less than desired and max should be more than desired (min <= desired <= max)"
   }
@@ -47,7 +47,7 @@ variable "asg_config" {
 }
 
 variable "public_key_path" {
-    description = "This is the path where your public key is stored locally"
-    type = string
-  
+  description = "This is the path where your public key is stored locally"
+  type        = string
+
 }

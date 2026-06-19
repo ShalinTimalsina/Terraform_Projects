@@ -1,0 +1,44 @@
+name: "Terraform CI/CD for alb-asg project"
+
+on:
+    push:
+        branches: ['main']
+    pull_request: 
+
+jobs:
+    terraform:
+        name: Terraform Pipeline
+        runs-on: ubuntu-latest
+    
+        env:
+            TF_VERSION: "6.44.0"
+        
+        steps:
+            - name: Checkout code 
+              uses: actions/checkout@v7.0.0
+
+            - name: HashiCorp - Setup Terraform
+              uses: hashicorp/setup-terraform@v4.0.1
+              with:
+                  TF_VERSION = ${{env.TF_VERSION}}
+
+            - name: "Configure AWS Credentials"
+              uses: aws-actions/configure-aws-credentials@v6.2.0
+              with:
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    aws-region: us-east-1   
+
+            - name: Terraform init
+              run: terraform init
+            
+            - name: Terraform fmt
+              run: terrafrom fmt
+
+            - name: Terraform plan
+              run: terraform plan 
+
+            # Terraform apply is only when pushed to the main branch
+            - name: Terraform apply 
+              if: github.ref == 'refs/head/main'
+              run: terraform apply --auto-approve

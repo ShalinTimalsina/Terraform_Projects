@@ -1,13 +1,13 @@
 # Creating a Target Group 
 resource "aws_lb_target_group" "alb_tg" {
-  name     = "alb-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.my_vpc.id
+  name        = "alb-tg"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.my_vpc.id
   target_type = "instance"
 
-  
- health_check {
+
+  health_check {
     path                = "/"
     protocol            = "HTTP"
     matcher             = "200"
@@ -22,19 +22,19 @@ resource "aws_lb_target_group" "alb_tg" {
 # Creating the ALB
 resource "aws_lb" "my_alb" {
 
- name = "${local.name_prefix}-alb"
- internal =   false
- load_balancer_type = "application"
+  name               = "${local.name_prefix}-alb"
+  internal           = false
+  load_balancer_type = "application"
 
- security_groups = [aws_security_group.alb_sg.id]
+  security_groups = [aws_security_group.alb_sg.id]
 
- subnets = aws_subnet.public_subnet[*].id
+  subnets = aws_subnet.public_subnet[*].id
 
   tags = merge(
     local.common_tags,
     {
       Name = "${local.name_prefix}-alb"
-    })
+  })
 
 }
 
@@ -42,13 +42,13 @@ resource "aws_lb" "my_alb" {
 
 resource "aws_lb_listener" "alb_listner_rule" {
 
-  load_balancer_arn = aws_lb.my_alb.arn 
-  port = 80 
-  protocol = "HTTP" 
-  
+  load_balancer_arn = aws_lb.my_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
   default_action {
-    type  = "forward"  
+    type             = "forward"
     target_group_arn = aws_lb_target_group.alb_tg.arn
   }
-  
+
 }
