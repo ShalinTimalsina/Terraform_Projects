@@ -14,7 +14,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   ingress {
-    description = "This allows the HTTPS access from the internet"
+    description = "This allows the HTTPS access from the internet to the users "
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"

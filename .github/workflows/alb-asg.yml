@@ -9,6 +9,17 @@ on:
     paths:
       - 'alb-asg-project/**'
 
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose action"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
+
 jobs:
   terraform:
     name: Terraform Pipeline
@@ -49,5 +60,9 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'   
+        if: github.event.inputs.action == 'apply' || github.event_name == 'push'
         run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: github.event.inputs.action == 'destroy'
+        run: terraform destroy -auto-approve
