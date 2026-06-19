@@ -3,25 +3,15 @@ variable "aws_region" {
     type = string
 }
 
-variable "vpc_cidr_block" {
-  description = "This is the CIDR Block for the main VPC"
-  type = string
-}
+variable "vpc_config" {
+  description = "This is the configurations of the vpc"
+  type = object({
+    vpc_cidr_block = string 
+    cidr_public_subnet = string
+    az_public_subnet = string
+    igw_cidr_block = optional(string, "0.0.0.0/0")
+  })
 
-variable "cidr_public_subnet" {
-  description = "This is the cidr range for public subnet"
-  type = string
-}
-
-variable "az_public_subnet" {
-  description = "This is the availability zone for public subnet"
-  type = string
-}
-
-variable "igw_cidr_block" {
-  description = "This is the cidr block for internet gateway"
-  type = string
-  default = "0.0.0.0/0"
 }
 
 variable "project" {
@@ -34,15 +24,12 @@ description = "This is the name of the environment"
 type = string
 }
 
-# Launch Template 
-variable "instance_type_lt" {
-    description = "This is the instance type for the launch template"
-    type = string
-}
-
-variable "ami_id_lt" {
-  description = "This is the ami id of the instance in the launch template"
-  type = string
+variable "launch_temp_config" {
+  description = "The is the configuration for launch template"
+  type = object({
+    ami_id  = string
+    instance_type = string
+  })
 }
 
 variable "asg_config" {

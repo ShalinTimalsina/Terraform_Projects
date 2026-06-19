@@ -1,5 +1,5 @@
 resource "aws_vpc" "my_vpc" {
-  cidr_block       = var.vpc_cidr_block
+  cidr_block       = var.vpc_config.vpc_cidr_block
   instance_tenancy = "default"
 
 
@@ -20,7 +20,7 @@ resource "aws_subnet" "public_subnet" {
 
   vpc_id = aws_vpc.my_vpc.id
 
-  cidr_block = cidrsubnet(var.vpc_cidr_block, 8, count.index)
+  cidr_block = cidrsubnet(var.vpc_config.vpc_cidr_block, 8, count.index)
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
@@ -49,7 +49,7 @@ resource "aws_route_table" "my_public_route" {
     Name = "my_public_route"
   }
   route {
-    cidr_block = var.igw_cidr_block
+    cidr_block = var.vpc_config.igw_cidr_block
     gateway_id = aws_internet_gateway.my_igw.id
 
 

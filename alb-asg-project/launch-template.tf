@@ -1,8 +1,8 @@
 resource "aws_launch_template" "app_launch_template" {
   name_prefix   = "${local.name_prefix}-lt"
   description   = "Launch template for application"
-  instance_type = var.instance_type_lt
-  image_id      = var.ami_id_lt
+  instance_type = var.launch_temp_config.instance_type
+  image_id      = var.launch_temp_config.ami_id
 
   key_name = aws_key_pair.my_key.key_name
 
