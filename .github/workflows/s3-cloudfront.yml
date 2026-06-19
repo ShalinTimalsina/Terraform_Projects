@@ -19,7 +19,7 @@ jobs:
         working-directory: s3-cloudfront-route53-acm-terraform  
 
     env:
-      TF_VERSION: "6.44.0"   
+      TF_VERSION: "1.15.6"   
 
     steps:
       - name: Checkout code
